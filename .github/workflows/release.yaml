@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm install --frozen-lockfile
 
-      - name: Build
-        run: gulp updateTag
-
       - name: Build extension package
         id: build_vsix
         run: |
