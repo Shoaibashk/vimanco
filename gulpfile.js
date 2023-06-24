@@ -56,4 +56,5 @@ function updateVersion(done) {
 
 
 gulp.task('release', gulp.series( updateVersion, createGitCommit, createGitTag));
+gulp.task('updateTag', gulp.series( updateVersion, createGitTag));
 gulp.task('default', gulp.series('release'));
