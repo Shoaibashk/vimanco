@@ -18,9 +18,9 @@ jobs:
     steps:
       - name: Checkout vimanco
         uses: actions/checkout@v3
-        
+
       - name: Build
-        uses: gulp
+        run: gulp
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

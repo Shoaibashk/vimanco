@@ -22,7 +22,7 @@ jobs:
         run: npm install --frozen-lockfile
 
       - name: Build
-        uses: gulp
+        run: gulp
 
       - name: Build extension package
         id: build_vsix
