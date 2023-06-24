@@ -1,0 +1,82 @@
+{
+  "name": "vimanco",
+  "displayName": "vimanco",
+  "description": "Shoaib's Key bindings for Visual Studio Code",
+  "version": "0.0.1",
+  "icon": "./Assets/keybinding.png",
+  "repository": {"type": "git","url": "https://github.com/Shoaibashk/vimanco"},
+  "publisher": "shoaibashk",
+  "license": "Apache 2.0",
+  "keywords": [
+    "vim",
+    "vi",
+    "shoaibashk",
+    "vimanco"
+  ],
+
+  "homepage": "https://github.com/Shoaibashk/vimanco",
+  "bugs": {
+    "url": "https://github.com/Shoaibashk/vimanco/issues"
+  },
+  "engines": {
+    "vscode": "^1.79.0"
+  },
+    "categories": [
+    "Other",
+    "Keymaps"
+  ],
+  "contributes": {
+    "keybindings": [
+      {
+        "key": "ctrl+n",
+        "command": "editor.action.addSelectionToNextFindMatch",
+        "when": "editorFocus"
+      },
+      {
+        "key": "ctrl+j",
+        "command": "selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus "
+      },
+      {
+        "key": "ctrl+k",
+        "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus "
+      },
+      {
+        "key": "ctrl+`",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+      },
+      {
+        "key": "ctrl+k",
+        "command": "-extension.vim_ctrl+k",
+        "when": "editorTextFocus && vim.active && vim.use<C-k> && !inDebugRepl"
+      },
+      {
+        "key": "shift+alt+k",
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "shift+alt+j",
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "shift+ctrl+k",
+        "command": "editor.action.copyLinesUpAction",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "shift+ctrl+j",
+        "command": "editor.action.copyLinesDownAction",
+        "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "key": "ctrl+t",
+        "command": "-extension.vim_ctrl+t",
+        "when": "editorTextFocus && vim.active && vim.use<C-t> && !inDebugRepl"
+      }
+    ]
+  }
+}

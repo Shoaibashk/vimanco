@@ -1,2 +1,7 @@
 # vimanco
-Its a Shoaib's Key bindings for Visual Studio Code
+
+Its a shoaib's keybindings for Visual Studio Code based on Vim Extension.
+
+## For more information
+
+**Enjoy!**
