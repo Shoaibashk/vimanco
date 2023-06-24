@@ -19,9 +19,6 @@ jobs:
       - name: Checkout vimanco
         uses: actions/checkout@v3
 
-      - name: Build
-        run: gulp
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -30,3 +27,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install --frozen-lockfile
+
+      - name: Build
+        run: gulp
