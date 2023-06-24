@@ -24,7 +24,7 @@ jobs:
       - name: Build extension package
         id: build_vsix
         run: |
-          npm install -g vsce;
+          npm install -g @vscode/vsce;
           vsce package;
           echo ::set-output name=vsix_path::$(ls *.vsix);
 
@@ -50,7 +50,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Publish to VSCode Extension Marketplace
-        run: npm run vsce publish --npm
+        run: vsce publish --no-yarn
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
