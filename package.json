@@ -2,7 +2,7 @@
   "name": "vimanco",
   "displayName": "vimanco",
   "description": "Shoaib's Key bindings for Visual Studio Code",
-  "version": "v0.0.1",
+  "version": "0.0.1",
   "icon": "Assets/keybinding.png",
   "repository": {
     "type": "git",
