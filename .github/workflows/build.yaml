@@ -16,7 +16,7 @@ jobs:
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Checkout vimanco
+      - name: Checkout Vimanco
         uses: actions/checkout@v3
 
       - name: Set up Node.js
