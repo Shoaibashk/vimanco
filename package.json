@@ -39,29 +39,29 @@
       }
     ],
     "configuration": {
-      "title": "ImKey",
+      "title": "Vimanco",
       "properties": {
-        "ImKey.UseSystemClipboard": {
+        "Vimanco.UseSystemClipboard": {
           "type": "boolean",
           "default": true,
           "description": "Enable use system clipboard."
         },
-        "ImKey.EasyMotion": {
+        "Vimanco.EasyMotion": {
           "type": "boolean",
           "default": true,
           "description": "Enable Easy Motion"
         },
-        "ImKey.IncSearch": {
+        "Vimanco.IncSearch": {
           "type": "boolean",
           "default": true,
           "description": "Enable Incremental Search in Vim"
         },
-        "ImKey.HlSearch": {
+        "Vimanco.HlSearch": {
           "type": "boolean",
           "default": true,
           "description": "Enable Highlight Search in Vim"
         },
-        "ImKey.InsertModeKeyBindings": {
+        "Vimanco.InsertModeKeyBindings": {
           "type": "array",
           "default": [
             {
@@ -76,7 +76,7 @@
           ],
           "description": "Enable Insert Mode Key binding"
         },
-        "ImKey.NormalModeKeyBindingsNonRecursive": {
+        "Vimanco.NormalModeKeyBindingsNonRecursive": {
           "type": "array",
           "default": [
             {
@@ -109,12 +109,12 @@
           ],
           "description": "Normal mode Keybinding"
         },
-        "ImKey.Leader": {
+        "Vimanco.Leader": {
           "type": "string",
           "default": "<space>",
           "description": "Enable Easy Motion"
         },
-        "ImKey.HandleKeys": {
+        "Vimanco.HandleKeys": {
           "type": "object",
           "default": {
             "<C-a>": false,

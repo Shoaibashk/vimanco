@@ -1,1 +1,229 @@
-(()=>{"use strict";var e={112:function(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&i(t,e,n);return o(t,e),t};Object.defineProperty(t,"__esModule",{value:!0}),t.deactivate=t.activate=void 0;const a=r(n(496)),s=n(754),u=n(927),c=n(767);t.activate=function(e){c.Logger.init(),(0,u.GetVimExtensionVersion)(),console.log('Congratulations, your extension "vimanco" is now active!');const t=(0,s.GetConfiguration)();let n=a.commands.registerCommand("vimanco.updateVim",(async()=>{const e=(0,s.GetCurrentExtensionConfiguration)();t.has("vim")&&(await(0,s.UpdateSetting)(t,"vim.useSystemClipboard",e.get("UseSystemClipboard")),await(0,s.UpdateSetting)(t,"vim.easymotion",e.get("EasyMotion")),await(0,s.UpdateSetting)(t,"vim.incsearch",e.get("IncSearch")),await(0,s.UpdateSetting)(t,"vim.hlsearch",e.get("HlSearch")),await(0,s.UpdateSetting)(t,"vim.insertModeKeyBindings",e.get("InsertModeKeyBindings")),await(0,s.UpdateSetting)(t,"vim.normalModeKeyBindingsNonRecursive",e.get("NormalModeKeyBindingsNonRecursive")),await(0,s.UpdateSetting)(t,"vim.leader",e.get("Leader")),await(0,s.UpdateSetting)(t,"vim.handleKeys",e.get("HandleKeys"))),a.window.showInformationMessage("Updated User Settings")}));e.subscriptions.push(n)},t.deactivate=function(){}},754:function(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&i(t,e,n);return o(t,e),t};Object.defineProperty(t,"__esModule",{value:!0}),t.GetCurrentExtensionConfiguration=t.UpdateSetting=t.GetConfiguration=void 0;const a=r(n(496));t.GetConfiguration=function(){return a.workspace.getConfiguration()},t.UpdateSetting=async function(e,t,n){return await e.update(t,n,!0)},t.GetCurrentExtensionConfiguration=function(){return a.workspace.getConfiguration("ImKey")}},927:function(e,t,n){var i=this&&this.__createBinding||(Object.create?function(e,t,n,i){void 0===i&&(i=n);var o=Object.getOwnPropertyDescriptor(t,n);o&&!("get"in o?!t.__esModule:o.writable||o.configurable)||(o={enumerable:!0,get:function(){return t[n]}}),Object.defineProperty(e,i,o)}:function(e,t,n,i){void 0===i&&(i=n),e[i]=t[n]}),o=this&&this.__setModuleDefault||(Object.create?function(e,t){Object.defineProperty(e,"default",{enumerable:!0,value:t})}:function(e,t){e.default=t}),r=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var n in e)"default"!==n&&Object.prototype.hasOwnProperty.call(e,n)&&i(t,e,n);return o(t,e),t};Object.defineProperty(t,"__esModule",{value:!0}),t.GetVimExtensionVersion=void 0;const a=r(n(496));t.GetVimExtensionVersion=async function(){const e=a.extensions.getExtension("vscodevim.vim");if(e){const t=e.packageJSON;console.log("Extension Name:",t.name),console.log("Extension Version:",t.version),console.log("Extension Description:",t.description)}else console.error("Extension not found.")}},767:(e,t,n)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.Logger=void 0;const i=n(496);class o{static output;static init(){o.output=i.window.createOutputChannel("Vim",{log:!0})}static error(e){o.output.error(e)}static warn(e){o.output.warn(e)}static info(e){o.output.info(e)}static debug(e){o.output.debug(e)}static trace(e){o.output.trace(e)}}t.Logger=o},496:e=>{e.exports=require("vscode")}},t={},n=function n(i){var o=t[i];if(void 0!==o)return o.exports;var r=t[i]={exports:{}};return e[i].call(r.exports,r,r.exports,n),r.exports}(112);module.exports=n})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
+/* 0 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.deactivate = exports.activate = void 0;
+const vscode = __importStar(__webpack_require__(1));
+const GetConfiguration_1 = __webpack_require__(2);
+const GetVimExtensionVersion_1 = __webpack_require__(3);
+const Logger_1 = __webpack_require__(4);
+function activate(context) {
+    Logger_1.Logger.init();
+    (0, GetVimExtensionVersion_1.GetVimExtensionVersion)();
+    console.log('Congratulations, your extension "vimanco" is now active!');
+    const userSettings = (0, GetConfiguration_1.GetConfiguration)();
+    let disposable = vscode.commands.registerCommand('vimanco.updateVim', async () => {
+        const currentExtension = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
+        if (userSettings.has("vim")) {
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.useSystemClipboard", currentExtension.get("UseSystemClipboard"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.easymotion", currentExtension.get("EasyMotion"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.incsearch", currentExtension.get("IncSearch"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.hlsearch", currentExtension.get("HlSearch"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.insertModeKeyBindings", currentExtension.get("InsertModeKeyBindings"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.normalModeKeyBindingsNonRecursive", currentExtension.get("NormalModeKeyBindingsNonRecursive"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.leader", currentExtension.get("Leader"));
+            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.handleKeys", currentExtension.get("HandleKeys"));
+        }
+        vscode.window.showInformationMessage("Updated User Settings");
+    });
+    context.subscriptions.push(disposable);
+}
+exports.activate = activate;
+function deactivate() { }
+exports.deactivate = deactivate;
+
+
+/***/ }),
+/* 1 */
+/***/ ((module) => {
+
+module.exports = require("vscode");
+
+/***/ }),
+/* 2 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GetCurrentExtensionConfiguration = exports.UpdateSetting = exports.GetConfiguration = void 0;
+const vscode = __importStar(__webpack_require__(1));
+function GetConfiguration() {
+    return vscode.workspace.getConfiguration();
+}
+exports.GetConfiguration = GetConfiguration;
+async function UpdateSetting(config, section, value) {
+    return await config.update(section, value, true);
+}
+exports.UpdateSetting = UpdateSetting;
+function GetCurrentExtensionConfiguration() {
+    return vscode.workspace.getConfiguration("Vimanco");
+}
+exports.GetCurrentExtensionConfiguration = GetCurrentExtensionConfiguration;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GetVimExtensionVersion = void 0;
+const vscode = __importStar(__webpack_require__(1));
+async function GetVimExtensionVersion() {
+    const extension = vscode.extensions.getExtension("vscodevim.vim");
+    if (extension) {
+        const packageJson = extension.packageJSON;
+        console.log("Extension Name:", packageJson.name);
+        console.log("Extension Version:", packageJson.version);
+        console.log("Extension Description:", packageJson.description);
+    }
+    else {
+        console.error("Extension not found.");
+    }
+}
+exports.GetVimExtensionVersion = GetVimExtensionVersion;
+
+
+/***/ }),
+/* 4 */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.Logger = void 0;
+const vscode_1 = __webpack_require__(1);
+class Logger {
+    static output;
+    static init() {
+        Logger.output = vscode_1.window.createOutputChannel('Vim', { log: true });
+    }
+    static error(msg) {
+        Logger.output.error(msg);
+    }
+    static warn(msg) {
+        Logger.output.warn(msg);
+    }
+    static info(msg) {
+        Logger.output.info(msg);
+    }
+    static debug(msg) {
+        Logger.output.debug(msg);
+    }
+    static trace(msg) {
+        Logger.output.trace(msg);
+    }
+}
+exports.Logger = Logger;
+
+
+/***/ })
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(0);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
+/******/ })()
+;
+//# sourceMappingURL=extension.js.map

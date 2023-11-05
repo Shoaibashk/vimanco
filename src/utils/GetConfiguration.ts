@@ -7,5 +7,5 @@ export async function UpdateSetting(config: vscode.WorkspaceConfiguration, secti
     return await config.update(section, value, true);
 }
 export function GetCurrentExtensionConfiguration(): vscode.WorkspaceConfiguration {
-    return vscode.workspace.getConfiguration("ImKey");
+    return vscode.workspace.getConfiguration("Vimanco");
 }
