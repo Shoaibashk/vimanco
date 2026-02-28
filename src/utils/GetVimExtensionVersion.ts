@@ -1,15 +1,13 @@
 import * as vscode from "vscode";
+import { Logger } from "./Logger";
 
-export async function GetVimExtensionVersion() {
+export function GetVimExtensionVersion(): void {
     const extension = vscode.extensions.getExtension("vscodevim.vim");
-
 
     if (extension) {
         const packageJson = extension.packageJSON;
-        console.log("Extension Name:", packageJson.name);
-        console.log("Extension Version:", packageJson.version);
-        console.log("Extension Description:", packageJson.description);
+        Logger.info(`VSCodeVim detected — name: ${packageJson.name}, version: ${packageJson.version}`);
     } else {
-        console.error("Extension not found.");
+        Logger.warn("VSCodeVim extension not found.");
     }
 }

@@ -34,26 +34,58 @@ const vscode = __importStar(__webpack_require__(1));
 const GetConfiguration_1 = __webpack_require__(2);
 const GetVimExtensionVersion_1 = __webpack_require__(3);
 const Logger_1 = __webpack_require__(4);
-function activate(context) {
-    Logger_1.Logger.init();
-    (0, GetVimExtensionVersion_1.GetVimExtensionVersion)();
-    console.log('Congratulations, your extension "vimanco" is now active!');
+async function applyVimSettings() {
+    const vimExt = vscode.extensions.getExtension('vscodevim.vim');
+    if (!vimExt) {
+        vscode.window.showWarningMessage('Vimanco: VSCodeVim extension is not installed. Settings were not applied.');
+        return false;
+    }
     const userSettings = (0, GetConfiguration_1.GetConfiguration)();
-    let disposable = vscode.commands.registerCommand('vimanco.updateVim', async () => {
-        const currentExtension = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
-        if (userSettings.has("vim")) {
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.useSystemClipboard", currentExtension.get("UseSystemClipboard"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.easymotion", currentExtension.get("EasyMotion"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.incsearch", currentExtension.get("IncSearch"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.hlsearch", currentExtension.get("HlSearch"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.insertModeKeyBindings", currentExtension.get("InsertModeKeyBindings"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.normalModeKeyBindingsNonRecursive", currentExtension.get("NormalModeKeyBindingsNonRecursive"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.leader", currentExtension.get("Leader"));
-            await (0, GetConfiguration_1.UpdateSetting)(userSettings, "vim.handleKeys", currentExtension.get("HandleKeys"));
+    const currentExtension = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
+    try {
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'useSystemClipboard', currentExtension.get('useSystemClipboard'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'easymotion', currentExtension.get('easyMotion'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'incsearch', currentExtension.get('incSearch'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'hlsearch', currentExtension.get('hlSearch'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'insertModeKeyBindings', currentExtension.get('insertModeKeyBindings'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'normalModeKeyBindingsNonRecursive', currentExtension.get('normalModeKeyBindingsNonRecursive'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'leader', currentExtension.get('leader'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'handleKeys', currentExtension.get('handleKeys'));
+    }
+    catch (err) {
+        Logger_1.Logger.error(`Failed to apply Vim settings: ${err}`);
+        vscode.window.showWarningMessage(`Vimanco: Failed to apply settings — ${err}`);
+        return false;
+    }
+    Logger_1.Logger.info('Vim settings updated from Vimanco configuration.');
+    return true;
+}
+function activate(context) {
+    Logger_1.Logger.init(context);
+    (0, GetVimExtensionVersion_1.GetVimExtensionVersion)();
+    Logger_1.Logger.info('Vimanco extension activated.');
+    // Apply settings on startup
+    applyVimSettings().catch(err => Logger_1.Logger.error(`Failed to apply settings on activation: ${err}`));
+    const disposableCommand = vscode.commands.registerCommand('vimanco.updateVim', async () => {
+        let success = false;
+        await vscode.window.withProgress({
+            location: vscode.ProgressLocation.Notification,
+            title: 'Vimanco: Applying Vim settings\u2026',
+            cancellable: false,
+        }, async () => {
+            success = await applyVimSettings();
+        });
+        if (success) {
+            vscode.window.showInformationMessage('Vimanco: Vim settings updated successfully.');
         }
-        vscode.window.showInformationMessage("Updated User Settings");
     });
-    context.subscriptions.push(disposable);
+    const disposableConfigChange = vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration('vimanco')) {
+            Logger_1.Logger.info('Vimanco configuration changed \u2014 re-applying Vim settings.');
+            applyVimSettings().catch(err => Logger_1.Logger.error(`Failed to re-apply settings: ${err}`));
+        }
+    });
+    context.subscriptions.push(disposableCommand, disposableConfigChange);
 }
 exports.activate = activate;
 function deactivate() { }
@@ -98,15 +130,18 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetCurrentExtensionConfiguration = exports.UpdateSetting = exports.GetConfiguration = void 0;
 const vscode = __importStar(__webpack_require__(1));
 function GetConfiguration() {
-    return vscode.workspace.getConfiguration();
+    return vscode.workspace.getConfiguration('vim');
 }
 exports.GetConfiguration = GetConfiguration;
 async function UpdateSetting(config, section, value) {
-    return await config.update(section, value, true);
+    if (value === undefined) {
+        return;
+    }
+    await config.update(section, value, vscode.ConfigurationTarget.Global);
 }
 exports.UpdateSetting = UpdateSetting;
 function GetCurrentExtensionConfiguration() {
-    return vscode.workspace.getConfiguration("Vimanco");
+    return vscode.workspace.getConfiguration("vimanco");
 }
 exports.GetCurrentExtensionConfiguration = GetCurrentExtensionConfiguration;
 
@@ -142,16 +177,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GetVimExtensionVersion = void 0;
 const vscode = __importStar(__webpack_require__(1));
-async function GetVimExtensionVersion() {
+const Logger_1 = __webpack_require__(4);
+function GetVimExtensionVersion() {
     const extension = vscode.extensions.getExtension("vscodevim.vim");
     if (extension) {
         const packageJson = extension.packageJSON;
-        console.log("Extension Name:", packageJson.name);
-        console.log("Extension Version:", packageJson.version);
-        console.log("Extension Description:", packageJson.description);
+        Logger_1.Logger.info(`VSCodeVim detected — name: ${packageJson.name}, version: ${packageJson.version}`);
     }
     else {
-        console.error("Extension not found.");
+        Logger_1.Logger.warn("VSCodeVim extension not found.");
     }
 }
 exports.GetVimExtensionVersion = GetVimExtensionVersion;
@@ -167,23 +201,49 @@ exports.Logger = void 0;
 const vscode_1 = __webpack_require__(1);
 class Logger {
     static output;
-    static init() {
-        Logger.output = vscode_1.window.createOutputChannel('Vim', { log: true });
+    static init(context) {
+        Logger.output = vscode_1.window.createOutputChannel('Vimanco', { log: true });
+        context.subscriptions.push(Logger.output);
     }
     static error(msg) {
-        Logger.output.error(msg);
+        if (Logger.output) {
+            Logger.output.error(msg);
+        }
+        else {
+            console.error(msg);
+        }
     }
     static warn(msg) {
-        Logger.output.warn(msg);
+        if (Logger.output) {
+            Logger.output.warn(msg);
+        }
+        else {
+            console.warn(msg);
+        }
     }
     static info(msg) {
-        Logger.output.info(msg);
+        if (Logger.output) {
+            Logger.output.info(msg);
+        }
+        else {
+            console.log(msg);
+        }
     }
     static debug(msg) {
-        Logger.output.debug(msg);
+        if (Logger.output) {
+            Logger.output.debug(msg);
+        }
+        else {
+            console.debug(msg);
+        }
     }
     static trace(msg) {
-        Logger.output.trace(msg);
+        if (Logger.output) {
+            Logger.output.trace(msg);
+        }
+        else {
+            console.trace(msg);
+        }
     }
 }
 exports.Logger = Logger;

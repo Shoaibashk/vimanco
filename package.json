@@ -1,15 +1,15 @@
 {
   "name": "vimanco",
-  "displayName": "vimanco",
-  "description": "Shoaib's Key bindings for Visual Studio Code",
-  "version": "0.0.1",
+  "displayName": "Vimanco - Vim Configuration Manager",
+  "description": "Opinionated Vim keybindings and settings manager for VSCodeVim.",
+  "version": "1.0.0",
   "icon": "Assets/keybinding.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/Shoaibashk/vimanco"
   },
   "publisher": "shoaibashk",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "extensionDependencies": [
     "vscodevim.vim"
   ],
@@ -29,39 +29,41 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "vimanco.updateVim",
-        "title": "Update Vim with Vimanco"
+        "title": "Vimanco: Update Vim Settings"
       }
     ],
     "configuration": {
       "title": "Vimanco",
       "properties": {
-        "Vimanco.UseSystemClipboard": {
+        "vimanco.useSystemClipboard": {
           "type": "boolean",
           "default": true,
-          "description": "Enable use system clipboard."
+          "description": "Enable Vim use-system-clipboard integration."
         },
-        "Vimanco.EasyMotion": {
+        "vimanco.easyMotion": {
           "type": "boolean",
           "default": true,
-          "description": "Enable Easy Motion"
+          "description": "Enable EasyMotion plugin for Vim."
         },
-        "Vimanco.IncSearch": {
+        "vimanco.incSearch": {
           "type": "boolean",
           "default": true,
-          "description": "Enable Incremental Search in Vim"
+          "description": "Enable incremental search in Vim."
         },
-        "Vimanco.HlSearch": {
+        "vimanco.hlSearch": {
           "type": "boolean",
           "default": true,
-          "description": "Enable Highlight Search in Vim"
+          "description": "Enable search highlight in Vim."
         },
-        "Vimanco.InsertModeKeyBindings": {
+        "vimanco.insertModeKeyBindings": {
           "type": "array",
           "default": [
             {
@@ -74,9 +76,9 @@
               ]
             }
           ],
-          "description": "Enable Insert Mode Key binding"
+          "description": "Insert mode key bindings passed to VSCodeVim."
         },
-        "Vimanco.NormalModeKeyBindingsNonRecursive": {
+        "vimanco.normalModeKeyBindingsNonRecursive": {
           "type": "array",
           "default": [
             {
@@ -91,14 +93,6 @@
             },
             {
               "before": [
-                "<C-n>"
-              ],
-              "commands": [
-                ":nohl"
-              ]
-            },
-            {
-              "before": [
                 "K"
               ],
               "commands": [
@@ -107,31 +101,33 @@
               "silent": true
             }
           ],
-          "description": "Normal mode Keybinding"
+          "description": "Normal mode non-recursive key bindings passed to VSCodeVim."
         },
-        "Vimanco.Leader": {
+        "vimanco.leader": {
           "type": "string",
           "default": "<space>",
-          "description": "Enable Easy Motion"
+          "description": "Vim leader key."
         },
-        "Vimanco.HandleKeys": {
+        "vimanco.handleKeys": {
           "type": "object",
           "default": {
             "<C-a>": false,
             "<C-f>": false,
             "<C-x>": false,
             "<C-c>": false,
-            "<C-v>": false
+            "<C-v>": false,
+            "<C-z>": false,
+            "<C-n>": false,
+            "<tab>": false
           },
-          "description": "Allow HandleKeys in Visual Mode"
+          "description": "Keys to let VS Code handle rather than Vim (passed to vim.handleKeys)."
         }
       }
     },
     "keybindings": [
       {
         "key": "ctrl+n",
-        "command": "editor.action.addSelectionToNextFindMatch",
-        "when": "editorFocus"
+        "command": "workbench.action.files.newUntitledFile"
       },
       {
         "key": "ctrl+j",
@@ -190,7 +186,7 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "pkgupdate": "gulp updateTag & vsce package"
+    "pkgupdate": "gulp update && vsce package"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
@@ -198,8 +194,6 @@
     "gulp-cli": "^2.3.0",
     "gulp-git": "^2.10.1",
     "gulp-tag-version": "^1.3.1",
-    "minimist": "^1.2.8",
-    "plugin-error": "^2.0.1",
     "yargs": "^17.7.2",
     "@types/vscode": "^1.84.0",
     "@types/mocha": "^10.0.3",
