@@ -1,43 +1,56 @@
 
-# vimanco
+# Vimanco
 
-Its a shoaib's keybindings for Visual Studio Code based on Vim Extension.
+![VS Code Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/shoaibashk.vimanco?style=flat-square&color=blue)
+![VS Code Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/shoaibashk.vimanco?style=flat-square&color=blue)
+![License](https://img.shields.io/github/license/Shoaibashk/vimanco?style=flat-square&color=blue)
+
+An opinionated Vim configuration manager for the [VSCodeVim](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim) extension.
+
 ![Alt text](Assets/banner.png)
 
-## Keybindings
+Vimanco acts as a **settings proxy** — it reads its own `vimanco.*` configuration properties and pushes them into the `vim.*` settings that VSCodeVim consumes. This lets you manage a curated set of Vim options, overrides, and unbinds through a single, unified configuration surface.
 
-![Alt text](Assets/keybindings.png)
+---
 
-## Installation
+## 📖 Documentation
 
-Vimanco can be installed via the VS Code [Marketplace](https://marketplace.visualstudio.com/items?itemName=shoaibashk.vimanco). Or from Vscode CLI
+For full details, configuration options, keybindings, and the contribution guide, visit the **[Vimanco Documentation Site](https://shoaibashk.github.io/vimanco/)**.
+
+- [Overview](https://shoaibashk.github.io/vimanco/#/overview.md)
+- [Installation Guide](https://shoaibashk.github.io/vimanco/#/installation.md)
+- [Configuration](https://shoaibashk.github.io/vimanco/#/configuration.md)
+- [Keybindings](https://shoaibashk.github.io/vimanco/#/keybindings.md)
+- [Development](https://shoaibashk.github.io/vimanco/#/development.md)
+
+---
+
+## Features
+
+- **Centralized Configuration:** Manage complex `vim.*` settings with simple `vimanco.*` options.
+- **Auto-Apply:** Automatically applies all `vimanco.*` settings on activation and whenever you save your `settings.json`.
+- **Preconfigured Defaults:** Leader key mapping (`<space>`), useful Insert mode bindings (`jj` to `<Esc>`), and native VS Code shortcuts delegated back so `<C-c>`, `<C-v>`, `<C-f>` work instantly.
+- **EasyMotion & System Clipboard:** Pre-configured and enabled right out of the box.
+
+## Quick Start
+
+### Installation
+
+Vimanco configures and interacts with VSCodeVim, so **VSCodeVim must be installed**.
+
+Install Vimanco via the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=shoaibashk.vimanco) or the CLI:
 
 ```shell
+code --install-extension vscodevim.vim
 code --install-extension shoaibashk.vimanco
 ```
 
-## Local Installation
+### Manual Trigger
 
-```sh
-vsce package
-code --install-extension vimanco-{version}.vsix
-```
+You can manually trigger synchronization of your settings at any time by running **Vimanco: Update Vim Settings** from the Command Palette (`Ctrl+Shift+P`).
 
-## Development
+---
 
-```sh
-gulp updateVersion --ver {versionNumber} # no 'v' letter before or after.
-```
+## License
 
-Create a PR then merge it with `main` branch.
-
-```sh
-#On main branch ->
-git tag -l
-git tag v0.0.6
-git push origin v0.0.6
-```
-
-## For more information
-
-**Enjoy!**
+This project is licensed under the [Apache-2.0 License](LICENSE).
