@@ -7,7 +7,13 @@ It acts as a **settings proxy** — it reads its own `vimanco.*` configuration p
 ## Features
 
 - **Centralized Configuration:** Manage your favorite VSCodeVim settings without memorizing all of the configuration keys.
+- **Presets System:** Three curated presets help you get started quickly:
+  - **Minimal:** Only essential settings (clipboard + leader key).
+  - **Default (recommended):** Balanced set of plugins and bindings.
+  - **Full:** All available plugins and bindings enabled.
 - **Auto-Apply:** Automatically applies all `vimanco.*` settings to `vim.*` on activation and whenever you make changes in your `settings.json`.
+- **Status Bar:** Shows your active preset and provides quick access to update settings.
+- **Reset Option:** Easily revert to defaults with a single command.
 - **Preconfigured defaults:**
   - `<space>` mapped to Leader Key out of the box.
   - Useful Insert mode keybindings (`jj` to `<Esc>`).

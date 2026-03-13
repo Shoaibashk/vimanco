@@ -38,6 +38,10 @@
       {
         "command": "vimanco.updateVim",
         "title": "Vimanco: Update Vim Settings"
+      },
+      {
+        "command": "vimanco.resetToDefaults",
+        "title": "Vimanco: Reset Settings to Defaults"
       }
     ],
     "configuration": {
@@ -121,6 +125,47 @@
             "<tab>": false
           },
           "description": "Keys to let VS Code handle rather than Vim (passed to vim.handleKeys)."
+        },
+        "vimanco.visualModeKeyBindingsNonRecursive": {
+          "type": "array",
+          "default": [],
+          "description": "Visual mode non-recursive key bindings passed to VSCodeVim."
+        },
+        "vimanco.surround": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable vim-surround plugin for Vim."
+        },
+        "vimanco.sneak": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable vim-sneak plugin for Vim."
+        },
+        "vimanco.smartcase": {
+          "type": "boolean",
+          "default": true,
+          "description": "Override ignorecase if search pattern contains uppercase letters."
+        },
+        "vimanco.ignorecase": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ignore case in search patterns."
+        },
+        "vimanco.camelCaseMotion": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable CamelCaseMotion plugin for Vim."
+        },
+        "vimanco.preset": {
+          "type": "string",
+          "default": "default",
+          "enum": ["minimal", "default", "full"],
+          "enumDescriptions": [
+            "Minimal: only clipboard and leader key.",
+            "Default: standard settings (recommended).",
+            "Full: all plugins and bindings enabled."
+          ],
+          "description": "Apply a curated preset of Vimanco settings. Individual settings still override the preset."
         }
       }
     },

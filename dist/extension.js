@@ -34,6 +34,16 @@ const vscode = __importStar(__webpack_require__(1));
 const GetConfiguration_1 = __webpack_require__(2);
 const GetVimExtensionVersion_1 = __webpack_require__(3);
 const Logger_1 = __webpack_require__(4);
+const Presets_1 = __webpack_require__(5);
+let statusBarItem;
+function getEffectiveBoolSetting(ext, key, presetName) {
+    const inspected = ext.inspect(key);
+    // If the user explicitly set the value, use it; otherwise fall back to preset
+    if (inspected?.globalValue !== undefined || inspected?.workspaceValue !== undefined) {
+        return ext.get(key) ?? (0, Presets_1.getPreset)(presetName)[key];
+    }
+    return (0, Presets_1.getPreset)(presetName)[key];
+}
 async function applyVimSettings() {
     const vimExt = vscode.extensions.getExtension('vscodevim.vim');
     if (!vimExt) {
@@ -41,32 +51,64 @@ async function applyVimSettings() {
         return false;
     }
     const userSettings = (0, GetConfiguration_1.GetConfiguration)();
-    const currentExtension = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
+    const ext = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
+    const presetName = ext.get('preset') ?? 'default';
     try {
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'useSystemClipboard', currentExtension.get('useSystemClipboard'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'easymotion', currentExtension.get('easyMotion'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'incsearch', currentExtension.get('incSearch'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'hlsearch', currentExtension.get('hlSearch'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'insertModeKeyBindings', currentExtension.get('insertModeKeyBindings'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'normalModeKeyBindingsNonRecursive', currentExtension.get('normalModeKeyBindingsNonRecursive'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'leader', currentExtension.get('leader'));
-        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'handleKeys', currentExtension.get('handleKeys'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'useSystemClipboard', getEffectiveBoolSetting(ext, 'useSystemClipboard', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'easymotion', getEffectiveBoolSetting(ext, 'easyMotion', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'incsearch', getEffectiveBoolSetting(ext, 'incSearch', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'hlsearch', getEffectiveBoolSetting(ext, 'hlSearch', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'surround', getEffectiveBoolSetting(ext, 'surround', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'sneak', getEffectiveBoolSetting(ext, 'sneak', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'smartcase', getEffectiveBoolSetting(ext, 'smartcase', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'ignorecase', getEffectiveBoolSetting(ext, 'ignorecase', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'camelCaseMotion.enable', getEffectiveBoolSetting(ext, 'camelCaseMotion', presetName));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'insertModeKeyBindings', ext.get('insertModeKeyBindings'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'normalModeKeyBindingsNonRecursive', ext.get('normalModeKeyBindingsNonRecursive'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'visualModeKeyBindingsNonRecursive', ext.get('visualModeKeyBindingsNonRecursive'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'leader', ext.get('leader'));
+        await (0, GetConfiguration_1.UpdateSetting)(userSettings, 'handleKeys', ext.get('handleKeys'));
     }
     catch (err) {
         Logger_1.Logger.error(`Failed to apply Vim settings: ${err}`);
         vscode.window.showWarningMessage(`Vimanco: Failed to apply settings — ${err}`);
         return false;
     }
-    Logger_1.Logger.info('Vim settings updated from Vimanco configuration.');
+    Logger_1.Logger.info(`Vim settings updated from Vimanco configuration (preset: ${presetName}).`);
+    updateStatusBar(presetName);
     return true;
+}
+async function resetToDefaults() {
+    const ext = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)();
+    const keys = [
+        'useSystemClipboard', 'easyMotion', 'incSearch', 'hlSearch',
+        'insertModeKeyBindings', 'normalModeKeyBindingsNonRecursive',
+        'visualModeKeyBindingsNonRecursive', 'leader', 'handleKeys',
+        'surround', 'sneak', 'smartcase', 'ignorecase', 'camelCaseMotion', 'preset'
+    ];
+    for (const key of keys) {
+        await ext.update(key, undefined, vscode.ConfigurationTarget.Global);
+    }
+    Logger_1.Logger.info('Vimanco settings reset to defaults.');
+}
+function updateStatusBar(preset) {
+    statusBarItem.text = `$(vm) Vimanco [${preset}]`;
+    statusBarItem.tooltip = `Vimanco is active — preset: ${preset}\nClick to update Vim settings`;
 }
 function activate(context) {
     Logger_1.Logger.init(context);
     (0, GetVimExtensionVersion_1.GetVimExtensionVersion)();
     Logger_1.Logger.info('Vimanco extension activated.');
+    // Status bar
+    statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    statusBarItem.command = 'vimanco.updateVim';
+    const presetName = (0, GetConfiguration_1.GetCurrentExtensionConfiguration)().get('preset') ?? 'default';
+    updateStatusBar(presetName);
+    statusBarItem.show();
+    context.subscriptions.push(statusBarItem);
     // Apply settings on startup
     applyVimSettings().catch(err => Logger_1.Logger.error(`Failed to apply settings on activation: ${err}`));
-    const disposableCommand = vscode.commands.registerCommand('vimanco.updateVim', async () => {
+    const disposableUpdate = vscode.commands.registerCommand('vimanco.updateVim', async () => {
         let success = false;
         await vscode.window.withProgress({
             location: vscode.ProgressLocation.Notification,
@@ -79,13 +121,21 @@ function activate(context) {
             vscode.window.showInformationMessage('Vimanco: Vim settings updated successfully.');
         }
     });
+    const disposableReset = vscode.commands.registerCommand('vimanco.resetToDefaults', async () => {
+        const confirm = await vscode.window.showWarningMessage('Vimanco: Reset all settings to defaults?', { modal: true }, 'Reset');
+        if (confirm === 'Reset') {
+            await resetToDefaults();
+            await applyVimSettings();
+            vscode.window.showInformationMessage('Vimanco: Settings reset to defaults.');
+        }
+    });
     const disposableConfigChange = vscode.workspace.onDidChangeConfiguration(event => {
         if (event.affectsConfiguration('vimanco')) {
             Logger_1.Logger.info('Vimanco configuration changed \u2014 re-applying Vim settings.');
             applyVimSettings().catch(err => Logger_1.Logger.error(`Failed to re-apply settings: ${err}`));
         }
     });
-    context.subscriptions.push(disposableCommand, disposableConfigChange);
+    context.subscriptions.push(disposableUpdate, disposableReset, disposableConfigChange);
 }
 exports.activate = activate;
 function deactivate() { }
@@ -247,6 +297,54 @@ class Logger {
     }
 }
 exports.Logger = Logger;
+
+
+/***/ }),
+/* 5 */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getPreset = void 0;
+const presets = {
+    minimal: {
+        useSystemClipboard: true,
+        easyMotion: false,
+        incSearch: false,
+        hlSearch: false,
+        surround: false,
+        sneak: false,
+        smartcase: false,
+        ignorecase: false,
+        camelCaseMotion: false,
+    },
+    default: {
+        useSystemClipboard: true,
+        easyMotion: true,
+        incSearch: true,
+        hlSearch: true,
+        surround: true,
+        sneak: false,
+        smartcase: true,
+        ignorecase: true,
+        camelCaseMotion: false,
+    },
+    full: {
+        useSystemClipboard: true,
+        easyMotion: true,
+        incSearch: true,
+        hlSearch: true,
+        surround: true,
+        sneak: true,
+        smartcase: true,
+        ignorecase: true,
+        camelCaseMotion: true,
+    },
+};
+function getPreset(name) {
+    return presets[name] ?? presets['default'];
+}
+exports.getPreset = getPreset;
 
 
 /***/ })
